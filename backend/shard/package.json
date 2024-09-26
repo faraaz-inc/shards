@@ -8,5 +8,15 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "@types/express": "^5.0.0",
+    "@types/ws": "^8.5.12",
+    "express": "^4.21.0",
+    "node-pty": "^1.0.0",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.3"
+  }
 }
