@@ -1,17 +1,17 @@
 import * as k8s from "@kubernetes/client-node";
-import { BASE_REPO, getManifest } from "./manifests";
+import { BASE_REPO, getDeploymentManifest } from "./manifests/deployment";
 
 export class Orchestrator {
     static instance: Orchestrator;
     kc: k8s.KubeConfig;
-    k8sApi: k8s.CoreV1Api;
+    k8sApi: k8s.AppsV1Api;
     pods: string[] = [];
 
 
     constructor() {
         this.kc = new k8s.KubeConfig();
         this.kc.loadFromDefault();
-        this.k8sApi = this.kc.makeApiClient(k8s.CoreV1Api);
+        this.k8sApi = this.kc.makeApiClient(k8s.AppsV1Api);
     }
 
     public static getInstance() {
@@ -20,12 +20,13 @@ export class Orchestrator {
         return this.instance;
     }
 
+    //create new pod
     async createPod(slug: string, language: string) {
         switch (language) {
             case "nodejs":
                 try {
-                    const pod = getManifest(`${BASE_REPO}:base-nodejs`, slug);
-                    const createPodRes = await this.k8sApi.createNamespacedPod("shards", pod);
+                    const deployment = getDeploymentManifest(`${BASE_REPO}:base-nodejs`, slug);
+                    const createPodRes = await this.k8sApi.createNamespacedDeployment("shards", deployment);
                     console.log("Pod created");
                     this.pods.push(createPodRes.body.metadata?.name as string);
 
@@ -44,9 +45,10 @@ export class Orchestrator {
         }
     }
 
+    //delete pod by name
     async deletePod(podName: string) {
         try {
-            const deletePodRes = await this.k8sApi.deleteNamespacedPod(podName, "shards");
+            const deletePodRes = await this.k8sApi.deleteNamespacedDeployment(podName, "shards");
             const podIndex = this.pods.findIndex(pod => pod === podName);
             this.pods.splice(podIndex, 1);
             console.log(`Pod ${podName} deleted`);
