@@ -25,3 +25,14 @@ body {
     text-wrap: balance;
   }
 }
+
+
+/* Hide scrollbar for xterm.js */
+.xterm .xterm-viewport::-webkit-scrollbar {
+  display: none;  /* For Chrome, Safari, and other WebKit browsers */
+}
+
+.xterm .xterm-viewport {
+  scrollbar-width: none;  /* For Firefox */
+  -ms-overflow-style: none;  /* For Internet Explorer and Edge */
+}

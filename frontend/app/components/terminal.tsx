@@ -2,15 +2,17 @@
 import { Terminal } from "@xterm/xterm";
 import { useEffect, useRef } from "react";
 import "@xterm/xterm/css/xterm.css"
+// import { FitAddon } from "xterm-addon-fit";
 
 
 export function XTerminal({ ws }: {ws: WebSocket}) {
+
     const inputBufferRef = useRef<string>("");
     const terminalRef = useRef<HTMLDivElement | null>(null);
     
     useEffect(() => {
         const terminal: Terminal = new Terminal();
-        // const ws = new WebSocket("ws://localhost:3003");
+        // const fittAddOn = new FitAddon();
 
         ws.onopen = () => {
             ws.send(JSON.stringify({
@@ -20,16 +22,19 @@ export function XTerminal({ ws }: {ws: WebSocket}) {
                 }
             }))
         }
-
-        if(terminalRef.current)
+        
+        if(terminalRef.current) {
+            // terminal.loadAddon(fittAddOn);
+            // fittAddOn.fit();
             terminal.open(terminalRef.current);
+        }
 
 
         terminal.onKey(({ key, domEvent }) => {
             if (domEvent.key === "Enter") {
                 //move to new line
                 terminal.write("\r\n");
-;                // Send the full command with an additional "\r" at the end
+                // Send the full command with an additional "\r" at the end
 
                 ws.send(JSON.stringify({
                     type: "terminalData",
@@ -67,5 +72,7 @@ export function XTerminal({ ws }: {ws: WebSocket}) {
         }
     }, []);
 
-    return <div ref={terminalRef}></div>
+    return <div ref={terminalRef} className="overflow-hidden xterm h-full rounded-lg bg-black m-2 p-2">
+
+    </div>
 }

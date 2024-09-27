@@ -5,7 +5,7 @@ const SHELL = "bash";
 
 export function initWs() {
 
-    const wss = new WebSocketServer({ port: 3003 });
+    const wss = new WebSocketServer({ port: 7007 });
     const terminalManager = new TerminalManager();
 
     wss.on("connection", (ws) => {

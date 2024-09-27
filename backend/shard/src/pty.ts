@@ -14,7 +14,7 @@ export class TerminalManager {
         let term = spawn(SHELL, ['-c', `stty -echo; exec ${SHELL}`], {
             cols: 100,
             name: 'xterm',
-            // cwd: `/workspace`
+            cwd: `/workspace`
         });
 
         term.onData((data: string) => onData(data));
