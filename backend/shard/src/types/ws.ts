@@ -10,4 +10,9 @@ export type IncomingMsg = {
     payload: {
         shardId: string,
     }
+} | {
+    type: "fetchDir" | "readFile",
+    payload: {
+        path: string
+    }
 }
