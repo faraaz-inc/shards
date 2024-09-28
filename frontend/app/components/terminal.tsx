@@ -14,14 +14,12 @@ export function XTerminal({ ws }: {ws: WebSocket}) {
         const terminal: Terminal = new Terminal();
         // const fittAddOn = new FitAddon();
 
-        ws.onopen = () => {
-            ws.send(JSON.stringify({
-                type: "requestTerminal",
-                payload: {
-                    shardId: "1"
-                }
-            }))
-        }
+        ws.send(JSON.stringify({
+            type: "requestTerminal",
+            payload: {
+                shardId: "1"
+            }
+        }));
         
         if(terminalRef.current) {
             // terminal.loadAddon(fittAddOn);
@@ -62,8 +60,6 @@ export function XTerminal({ ws }: {ws: WebSocket}) {
             if(data.type === "terminalData") {
                 terminal.write(data.data);
             }
-
-
         }
 
         return () => {
