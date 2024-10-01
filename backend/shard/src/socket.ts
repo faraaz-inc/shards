@@ -1,7 +1,6 @@
 import { Server, Socket } from "socket.io";
 import { Server as HttpServer } from "http";
 // import { saveToS3 } from "./aws";
-import path from "path";
 import { fetchDir, fetchFileContent, saveFile } from "./files";
 
 export function initSocketio(httpServer: HttpServer) {
@@ -12,8 +11,10 @@ export function initSocketio(httpServer: HttpServer) {
             methods: ["GET", "POST"],
         },
     });
+
+    const nsp = io.of("/socketio");
       
-    io.on("connection", async (socket) => {
+    nsp.on("connection", async (socket) => {
         console.log("Socket.io connection established");
         // Auth checks should happen here
         const host = socket.handshake.headers.host;
@@ -52,7 +53,6 @@ function initHandlers(socket: Socket, shardId: string) {
         callback(data);
     });
 
-    // TODO: contents should be diff, not full file
     // Should be validated for size
     // Should be throttled before updating S3 (or use an S3 mount)
 

@@ -1,13 +1,13 @@
 
-FROM node:20
+FROM node:22.6.0
 
 WORKDIR /code
 
-RUN mkdir -p /root/workspace
+RUN mkdir /workspace
 
 COPY package*.json ./
 
-RUN npm insall
+RUN npm install
 
 COPY . .
 
