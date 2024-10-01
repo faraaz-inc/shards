@@ -7,7 +7,7 @@ RUN mkdir -p /root/workspace
 
 COPY package*.json ./
 
-RUN "npm insall --only=production"
+RUN npm insall
 
 COPY . .
 
