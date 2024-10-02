@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { File, RemoteFile, Type } from "../components/external/utils/file-manager";
 import { Socket, io } from "socket.io-client";
 import { Editor } from "./editor";
+import { OutputWindow } from "../components/output";
 
 export default function() {
     const [podCreated, setPodCreated] = useState<boolean>(true);
@@ -30,14 +31,14 @@ export function PostPodCreation() {
     const [loaded, setLoaded] = useState(false);
     const [fileStructure, setFileStructure] = useState<RemoteFile[]>([]);
     const [selectedFile, setSelectedFile] = useState<File | undefined>(undefined);
+    const [Outport, setOutport] = useState<number>(5000);
 
     const socket = useSocket(shardId);
 
 
     useEffect(() => {
         //websocket for terminal
-        const ws = new WebSocket("ws://localhost:7007");
-        
+        const ws = new WebSocket(`ws://${shardId}.frztech.test:3007/ws`);
         ws.onopen = () => {
             setWs(ws);
         }    
@@ -95,9 +96,9 @@ export function PostPodCreation() {
         </div>
         <div className="col-span-2">
             <div className="h-[300px]">
-                Output screen
+                <OutputWindow shardId={shardId} />
             </div>
-            <div className="h-[350px]">
+            <div className="h-[300px]">
                 <XTerminal ws={ws} />             
             </div>
         </div>
@@ -106,17 +107,13 @@ export function PostPodCreation() {
 
 
 
-function useSocket(replId: string) {
+function useSocket(shardId: string) {
     const [socket, setSocket] = useState<Socket | null>(null);
 
     useEffect(() => {
-        const newSocket = io(`ws://localhost:7008`);
+        const newSocket = io(`${shardId}.frztech.test:3007`);
         setSocket(newSocket);
-
-        return () => {
-            newSocket.disconnect();
-        };
-    }, [replId]);
+    }, [shardId]);
 
     return socket;
 }

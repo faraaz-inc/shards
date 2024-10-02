@@ -68,7 +68,7 @@ export function XTerminal({ ws }: {ws: WebSocket}) {
         }
     }, []);
 
-    return <div ref={terminalRef} className="overflow-hidden xterm h-full rounded-lg bg-black m-2 p-2">
+    return <div ref={terminalRef} className="overflow-hidden xterm h-full ml-6 mt-4 rounded-lg bg-black m-2 p-2">
 
     </div>
 }
